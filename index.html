@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GridSim CHIL Testing</title>
+
+  <!-- ── Fonts & Colors ─────────────────────────────────────────── -->
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --accent: #005080;        /* deep engineering blue */
+      --accent-light: #d6e6f2;
+      --text: #1a1a1a;
+      --mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    /* PCB‑trace style background (subtle) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(135deg, var(--accent-light) 1px, transparent 1px),
+        linear-gradient(225deg, var(--accent-light) 1px, transparent 1px);
+      background-size: 9px 9px;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    /* ── Layout ────────────────────────────────────────────────── */
+    .wrapper {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 2.5rem 1.2rem 4rem;
+      display: grid;
+      row-gap: 3rem;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3rem);
+      color: var(--accent);
+      margin: 0 0 0.6rem;
+      letter-spacing: -0.5px;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      max-width: 40ch;
+    }
+
+    /* ── Cards grid ───────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid #e1e5eb;
+      border-radius: 8px;
+      padding: 1.6rem 1.4rem 1.8rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform .2s cubic-bezier(.4,.2,.2,1);
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: .5rem;
+      color: var(--accent);
+      font-size: 1.15rem;
+    }
+
+    /* ── Contact ──────────────────────────────────────────────── */
+    .contact a:any-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color .18s;
+    }
+    .contact a:hover { border-color: var(--accent); }
+
+    /* ── Mono highlights ─────────────────────────────────────── */
+    code {
+      font-family: var(--mono);
+      background: var(--accent-light);
+      padding: 0 .25em;
+      border-radius: 3px;
+      font-size: .92em;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrapper">
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>GridSim CHIL Testing</h1>
+      <p><strong>Real‑time control validation for PV & BESS plants.</strong><br/>
+         Cut commissioning from <code>weeks</code> to <code>days</code> by catching issues in hardware‑in‑the‑loop simulations.</p>
+    </section>
+
+    <!-- What We Offer -->
+    <section>
+      <h2>🔧 What We Offer</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Pre‑FAT CHIL Validation</h3>
+          <p>AVR, PF, FW, ramp‑rate &amp; LV/HVRT sequences executed on high‑fidelity real‑time simulators.</p>
+        </div>
+        <div class="card">
+          <h3>Tag‑Map Debugging</h3>
+          <p>SEL RTAC, Modbus, DNP3—ensure setpoints and feedback scale correctly the first time.</p>
+        </div>
+        <div class="card">
+          <h3>Automated Reporting</h3>
+          <p>Plots, KPI tables, and compliance verdicts delivered in a concise PDF package.</p>
+        </div>
+        <div class="card">
+          <h3>Rapid Turnaround</h3>
+          <p>Typical pilot engagement: <code>2&nbsp;days</code> test design → <code>3&nbsp;days</code> execution → <code>1&nbsp;day</code> report.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why CHIL -->
+    <section>
+      <h2>⚡ Why CHIL?</h2>
+      <ul>
+        <li>Eliminate on‑site rework &amp; trip charges</li>
+        <li>Derisk grid‑code compliance (ERCOT, CAISO, BPA)</li>
+        <li>Stress‑test controls against realistic faults before energization</li>
+      </ul>
+    </section>
+
+    <!-- About -->
+    <section>
+      <h2>👋 About</h2>
+      <p>I’m John Schafer, a systems engineer who’s commissioned gigawatt‑scale PV &amp; storage plants.  
+         GridSim CHIL Testing is my independent service arm—bringing the same HIL workflows I use in the field to EPCs and developers nationwide.</p>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact">
+      <h2>📬 Get in Touch</h2>
+      <p>Email: <a href="mailto:yourname.gridtesting@gmail.com">yourname.gridtesting@gmail.com</a><br/>
+         LinkedIn: <a href="https://linkedin.com/in/YOUR-LINKEDIN">linkedin.com/in/YOUR-LINKEDIN</a></p>
+      <p><small>© <span id="year"></span> GridSim CHIL Testing</small></p>
+    </section>
+
+  </main>
+
+  <!-- Auto‑update copyright year -->
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
+
