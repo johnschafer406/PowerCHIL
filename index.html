@@ -3,164 +3,254 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GridSim CHIL Testing</title>
-
-  <!-- ── Fonts & Colors ─────────────────────────────────────────── -->
+  <title>PowerCHIL – Controller‑HIL Testing</title>
+  <!-- ========================= COLORS & TYPO ========================= -->
   <style>
     :root {
-      --bg: #f5f7fa;
-      --card: #ffffff;
-      --accent: #005080;        /* deep engineering blue */
-      --accent-light: #d6e6f2;
-      --text: #1a1a1a;
-      --mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+      --bg-dark: #0d0d0d;
+      --bg-light: #f3f4f6;
+      --text-light: #fafafa;
+      --text-dark: #1a1a1a;
+      --accent: #18c4c4;              /* retro teal */
+      --accent-soft: #0f8f8f;
+      --card-bg: #1a1a1a;
     }
 
-    /* PCB‑trace style background (subtle) */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(135deg, var(--accent-light) 1px, transparent 1px),
-        linear-gradient(225deg, var(--accent-light) 1px, transparent 1px);
-      background-size: 9px 9px;
-      opacity: 0.06;
-      pointer-events: none;
+    /* -------- Base -------- */
+    html {
+      scroll-behavior: smooth;      /* smooth anchor scroll */
     }
-
     body {
       margin: 0;
-      font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.55;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
     }
 
-    /* ── Layout ────────────────────────────────────────────────── */
-    .wrapper {
-      max-width: 880px;
-      margin: 0 auto;
-      padding: 2.5rem 1.2rem 4rem;
-      display: grid;
-      row-gap: 3rem;
+    h1,h2,h3,h4,h5 {
+      font-weight: 600;
+      letter-spacing: -0.4px;
     }
 
-    /* ── Hero ─────────────────────────────────────────────────── */
-    .hero h1 {
-      font-size: clamp(2.2rem, 6vw, 3rem);
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-soft); }
+
+    /* -------- Navigation -------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(13,13,13,0.9);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      z-index: 999;
+    }
+    nav .brand {
+      font-weight: 700;
+      font-size: 1rem;
       color: var(--accent);
-      margin: 0 0 0.6rem;
-      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav li { display: inline; }
+    nav a { color: var(--text-light); font-size: 0.9rem; }
+
+    /* -------- Hero -------- */
+    .hero {
+      height: 100vh;
+      background: url("hero.jpg") center/cover no-repeat fixed; /* <<< Replace hero.jpg with actual PV image */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 5%;
+      color: var(--text-light);
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.7) 60%);
+    }
+    .hero-content {
+      position: relative;
+      max-width: 600px;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      margin: 0 0 1rem;
     }
     .hero p {
-      font-size: 1.15rem;
-      max-width: 40ch;
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg-dark);
+      padding: 0.9rem 1.8rem;
+      border-radius: 3px;
+      font-weight: 600;
+      transition: background 0.25s;
+    }
+    .btn:hover { background: var(--accent-soft); }
+
+    /* -------- Sections -------- */
+    section {
+      padding: 4.5rem 5% 5rem;
+    }
+    .dark {
+      background: var(--bg-dark);
+      color: var(--text-light);
     }
 
-    /* ── Cards grid ───────────────────────────────────────────── */
+    /* -------- Grid utilities -------- */
     .grid {
       display: grid;
-      gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .cards-3 {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
     .card {
-      background: var(--card);
-      border: 1px solid #e1e5eb;
-      border-radius: 8px;
-      padding: 1.6rem 1.4rem 1.8rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-      transition: transform .2s cubic-bezier(.4,.2,.2,1);
+      background: var(--card-bg);
+      padding: 1.8rem 1.6rem;
+      border-radius: 6px;
+      color: var(--text-light);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: transform 0.25s ease;
     }
-    .card:hover { transform: translateY(-4px); }
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: .5rem;
-      color: var(--accent);
-      font-size: 1.15rem;
+    .card:hover { transform: translateY(-5px); }
+
+    /* -------- About layout -------- */
+    .about-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      max-width: 800px;
     }
 
-    /* ── Contact ──────────────────────────────────────────────── */
-    .contact a:any-link {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color .18s;
+    /* -------- Contact -------- */
+    .contact {
+      text-align: center;
+      font-size: 1rem;
     }
-    .contact a:hover { border-color: var(--accent); }
+    .contact p { margin: 0.3rem 0; }
 
-    /* ── Mono highlights ─────────────────────────────────────── */
-    code {
-      font-family: var(--mono);
-      background: var(--accent-light);
-      padding: 0 .25em;
-      border-radius: 3px;
-      font-size: .92em;
-    }
+    /* -------- Reveal animations -------- */
+    .reveal { opacity: 0; transform: translateY(40px); transition: 0.7s cubic-bezier(.25,.46,.45,.94); }
+    .reveal.visible { opacity: 1; transform: none; }
   </style>
 </head>
 <body>
-  <main class="wrapper">
+  <!-- ========== NAV ========== -->
+  <nav>
+    <div class="brand">PowerCHIL</div>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#benefits">Benefits</a></li>
+      <li><a href="#tech">How CHIL Works</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-    <!-- Hero -->
-    <section class="hero">
-      <h1>GridSim CHIL Testing</h1>
-      <p><strong>Real‑time control validation for PV & BESS plants.</strong><br/>
-         Cut commissioning from <code>weeks</code> to <code>days</code> by catching issues in hardware‑in‑the‑loop simulations.</p>
-    </section>
+  <!-- ========== HERO ========== -->
+  <header class="hero" id="home">
+    <div class="hero-content">
+      <h1>Expedited commissioning through advanced controller‑HIL simulation.</h1>
+      <p>Save engineering hours, derisk liquidated damages, and go live sooner—without touching the field.</p>
+      <a class="btn" href="#contact">Request a Pilot</a>
+    </div>
+  </header>
 
-    <!-- What We Offer -->
-    <section>
-      <h2>🔧 What We Offer</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Pre‑FAT CHIL Validation</h3>
-          <p>AVR, PF, FW, ramp‑rate &amp; LV/HVRT sequences executed on high‑fidelity real‑time simulators.</p>
-        </div>
-        <div class="card">
-          <h3>Tag‑Map Debugging</h3>
-          <p>SEL RTAC, Modbus, DNP3—ensure setpoints and feedback scale correctly the first time.</p>
-        </div>
-        <div class="card">
-          <h3>Automated Reporting</h3>
-          <p>Plots, KPI tables, and compliance verdicts delivered in a concise PDF package.</p>
-        </div>
-        <div class="card">
-          <h3>Rapid Turnaround</h3>
-          <p>Typical pilot engagement: <code>2&nbsp;days</code> test design → <code>3&nbsp;days</code> execution → <code>1&nbsp;day</code> report.</p>
-        </div>
+  <!-- ========== SERVICES ========== -->
+  <section id="services" class="reveal">
+    <h2>Services</h2>
+    <div class="grid cards-3">
+      <div class="card">
+        <h3>Controller Development &amp; Troubleshooting</h3>
+        <p>Rapid prototype and iterate PPC logic in a safe, real‑time environment.</p>
       </div>
-    </section>
+      <div class="card">
+        <h3>Pre‑Commissioning FAT</h3>
+        <p>Full functional test suite (AVR, PF, FW, ramp, LVRT) executed before boots hit the site.</p>
+      </div>
+      <div class="card">
+        <h3>Typhoon HIL &amp; RTDS Execution</h3>
+        <p>Flexible platform choice depending on project scope, fidelity, and utility requirements.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Why CHIL -->
-    <section>
-      <h2>⚡ Why CHIL?</h2>
-      <ul>
-        <li>Eliminate on‑site rework &amp; trip charges</li>
-        <li>Derisk grid‑code compliance (ERCOT, CAISO, BPA)</li>
-        <li>Stress‑test controls against realistic faults before energization</li>
-      </ul>
-    </section>
+  <!-- ========== BENEFITS ========== -->
+  <section id="benefits" class="dark reveal">
+    <h2>Why CHIL?</h2>
+    <ul>
+      <li><strong>Cut 30–50% of commissioning engineering hours.</strong></li>
+      <li>Expose control bugs before liquidated damages kick in.</li>
+      <li>Validate grid‑code compliance for ERCOT, CAISO, BPA, etc.</li>
+      <li>Stress‑test fault ride‑through sequences in real‑time without risking hardware.</li>
+    </ul>
+  </section>
 
-    <!-- About -->
-    <section>
-      <h2>👋 About</h2>
-      <p>I’m John Schafer, a systems engineer who’s commissioned gigawatt‑scale PV &amp; storage plants.  
-         GridSim CHIL Testing is my independent service arm—bringing the same HIL workflows I use in the field to EPCs and developers nationwide.</p>
-    </section>
+  <!-- ========== TECHNICAL DESCRIPTION ========== -->
+  <section id="tech" class="reveal">
+    <h2>How CHIL Works</h2>
+    <div class="about-wrap">
+      <p><strong>Controller‑Hardware‑in‑the‑Loop (CHIL)</strong> couples your live Power Plant Controller hardware to a high‑fidelity real‑time simulator (Typhoon HIL or RTDS). The simulator emulates transformers, MV feeders, inverters, and grid disturbances with sub‑microsecond resolution.</p>
+      <p>Setpoints and measurements exchange over actual protocol links—Modbus, DNP3, IEC‑61850—so the PPC operates exactly as it will on site. We inject voltage steps, frequency ramps, or fault events and watch the controller’s response in real time, logging every variable at up to 50 kHz.</p>
+      <p>The result: a digital twin that lets you iterate logic, tune PI loops, and prove compliance—all before the truck rolls.</p>
+    </div>
+  </section>
 
-    <!-- Contact -->
-    <section class="contact">
-      <h2>📬 Get in Touch</h2>
-      <p>Email: <a href="mailto:yourname.gridtesting@gmail.com">yourname.gridtesting@gmail.com</a><br/>
-         LinkedIn: <a href="https://linkedin.com/in/YOUR-LINKEDIN">linkedin.com/in/YOUR-LINKEDIN</a></p>
-      <p><small>© <span id="year"></span> GridSim CHIL Testing</small></p>
-    </section>
+  <!-- ========== ABOUT ========== -->
+  <section id="about" class="dark reveal">
+    <h2>About</h2>
+    <p>PowerCHIL is an independent engineering service founded by <strong>John Schafer</strong>, a Bend, Oregon‑based systems engineer who has commissioned gigawatt‑scale PV + BESS projects across the U.S. By bringing laboratory‑grade real‑time simulation to EPCs and developers, John helps teams de‑risk schedules, save field hours, and hit COD with confidence.</p>
+  </section>
 
-  </main>
+  <!-- ========== CONTACT ========== -->
+  <section id="contact" class="reveal">
+    <h2>Contact</h2>
+    <div class="contact">
+      <p>Email: <a href="mailto:johnschafer406@gmail.com">johnschafer406@gmail.com</a></p>
+      <p>Phone: <a href="tel:+14065395078">406‑539‑5078</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/john-schafer-5a3271204/">linkedin.com/in/john‑schafer‑5a3271204</a></p>
+      <p>Based in Bend, Oregon – Serving clients remotely.</p>
+    </div>
+  </section>
 
-  <!-- Auto‑update copyright year -->
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <!-- ========== FOOTER ========== -->
+  <footer class="dark" style="text-align:center; padding: 1.5rem; font-size:0.85rem;">
+    © <span id="yr"></span> PowerCHIL. All rights reserved.
+  </footer>
+
+  <!-- ========================= JS – Reveal Animations ========================= -->
+  <script>
+    // update year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Intersection Observer for reveal animations
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
-
